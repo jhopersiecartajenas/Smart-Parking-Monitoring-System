@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ParkFlow — Sign in</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .login-wrap {
+      min-height: 100vh; display: grid; place-items: center; padding: 32px;
+    }
+    .login-card {
+      width: 100%; max-width: 480px; padding: 48px 44px;
+      animation: fadeUp .8s var(--ease) both;
+    }
+    .login-brand { display: flex; align-items: center; gap: 14px; justify-content: center; margin-bottom: 10px; }
+    .login-card h1 { font-size: 1.8rem; font-weight: 400; text-align: center; letter-spacing: -.02em; margin-top: 22px; }
+    .login-card .lead { text-align: center; color: var(--text-soft); font-size: .98rem; margin: 8px 0 30px; }
+
+    .role-switch {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 6px; padding: 6px;
+      border-radius: var(--radius-sm); background: rgba(8,16,32,.55);
+      border: 1px solid var(--border); margin-bottom: 26px; position: relative;
+    }
+    [data-theme="light"] .role-switch { background: rgba(255,255,255,.7); }
+    .role-switch button {
+      position: relative; z-index: 1; padding: 14px; border-radius: 10px;
+      font-size: .98rem; font-weight: 500; color: var(--text-soft);
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      transition: color .3s var(--ease);
+    }
+    .role-switch button svg { width: 19px; height: 19px; }
+    .role-switch button.active { color: #fff; }
+    .role-slider {
+      position: absolute; top: 6px; bottom: 6px; left: 6px; width: calc(50% - 6px);
+      border-radius: 10px; z-index: 0;
+      background: linear-gradient(135deg, var(--primary), color-mix(in srgb, var(--primary) 70%, #fff));
+      box-shadow: 0 8px 22px color-mix(in srgb, var(--primary) 40%, transparent);
+      transition: transform .45s var(--ease);
+    }
+    .role-switch.security .role-slider { transform: translateX(calc(100% + 0px)); }
+
+    .field { margin-bottom: 20px; }
+    .field label {
+      display: block; font-size: .78rem; letter-spacing: .14em; text-transform: uppercase;
+      color: var(--text-mute); margin-bottom: 10px;
+    }
+    .pw-wrap { position: relative; }
+    .pw-wrap .input { padding-right: 58px; }
+    .pw-toggle {
+      position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+      width: 40px; height: 40px; border-radius: 10px; display: grid; place-items: center;
+      color: var(--text-mute); transition: all .25s var(--ease);
+    }
+    .pw-toggle:hover { color: var(--text); background: rgba(120,160,230,.1); }
+    .pw-toggle svg { width: 20px; height: 20px; }
+
+    .error {
+      display: none; margin-bottom: 18px; padding: 14px 18px; border-radius: var(--radius-sm);
+      background: rgba(255,107,107,.1); border: 1px solid rgba(255,107,107,.4);
+      color: var(--danger); font-size: .92rem;
+    }
+    .error.show { display: block; animation: shake .45s var(--ease); }
+    @keyframes shake {
+      0%,100% { transform: translateX(0); } 20% { transform: translateX(-8px); }
+      40% { transform: translateX(8px); } 60% { transform: translateX(-5px); } 80% { transform: translateX(5px); }
+    }
+
+    .login-card .btn-primary { width: 100%; padding: 17px; font-size: 1.05rem; margin-top: 6px; }
+
+    .hint {
+      margin-top: 26px; padding: 18px 20px; border-radius: var(--radius-sm);
+      background: rgba(120,160,230,.06); border: 1px dashed var(--border-strong);
+      font-size: .88rem; color: var(--text-soft); line-height: 1.8;
+    }
+    .hint b { color: var(--text); font-weight: 500; }
+    .hint code {
+      background: rgba(120,160,230,.12); padding: 2px 8px; border-radius: 6px;
+      font-size: .85rem; color: var(--accent);
+    }
+  </style>
+</head>
+<body>
+  <div class="login-wrap">
+    <div class="card login-card">
+
+      <div class="login-brand">
+        <div class="brand-logo">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round">
+            <path d="M6 20V11M12 20V5M18 20V14"/>
+          </svg>
+        </div>
+        <span class="brand-name">ParkFlow</span>
+      </div>
+
+      <h1>Welcome back</h1>
+      <p class="lead">Sign in to the Smart Parking Monitoring System</p>
+
+      <div class="role-switch" id="roleSwitch">
+        <div class="role-slider"></div>
+        <button type="button" class="active" data-role="admin">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 3l8 3v6c0 4.5-3.2 8-8 9-4.8-1-8-4.5-8-9V6l8-3z"/><path d="M9 12l2 2 4-4"/>
+          </svg>
+          Admin
+        </button>
+        <button type="button" data-role="security">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/>
+          </svg>
+          Security
+        </button>
+      </div>
+
+      <form id="loginForm" autocomplete="off">
+        <div class="error" id="error"></div>
+
+        <div class="field">
+          <label for="username">Username</label>
+          <input class="input" id="username" type="text" placeholder="Enter your username" required />
+        </div>
+
+        <div class="field">
+          <label for="password">Password</label>
+          <div class="pw-wrap">
+            <input class="input" id="password" type="password" placeholder="Enter your password" required />
+            <button type="button" class="pw-toggle" id="pwToggle" aria-label="Show password">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <button class="btn btn-primary" type="submit">Sign in</button>
+      </form>
+
+      <div class="hint">
+        <b>Demo accounts</b><br />
+        Admin: <code>admin</code> / <code>admin123</code><br />
+        Security: <code>security</code> / <code>security123</code>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/auth.js"></script>
+  <script>
+    // already signed in -> go straight to the dashboard
+    const existing = Auth.current();
+    if (existing) window.location.replace(existing.home);
+
+    const form = document.getElementById('loginForm');
+    const userEl = document.getElementById('username');
+    const passEl = document.getElementById('password');
+    const errEl = document.getElementById('error');
+    const switchEl = document.getElementById('roleSwitch');
+    let role = 'admin';
+
+    // role switch (auto-fills the demo username)
+    switchEl.querySelectorAll('button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        role = btn.dataset.role;
+        switchEl.classList.toggle('security', role === 'security');
+        switchEl.querySelectorAll('button').forEach(b => b.classList.toggle('active', b === btn));
+        userEl.value = role;
+        passEl.value = '';
+        errEl.classList.remove('show');
+        passEl.focus();
+      });
+    });
+    userEl.value = 'admin';
+
+    // show / hide password
+    document.getElementById('pwToggle').addEventListener('click', () => {
+      passEl.type = passEl.type === 'password' ? 'text' : 'password';
+    });
+
+    // submit
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      const res = Auth.login(userEl.value, passEl.value, role);
+      if (!res.ok) {
+        errEl.textContent = res.reason;
+        errEl.classList.remove('show'); void errEl.offsetWidth; // restart animation
+        errEl.classList.add('show');
+        return;
+      }
+      document.body.style.transition = 'opacity .35s';
+      document.body.style.opacity = '0';
+      setTimeout(() => window.location.href = res.user.home, 350);
+    });
+  </script>
+</body>
+</html>

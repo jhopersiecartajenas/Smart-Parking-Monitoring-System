@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ParkFlow — Dashboard</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/slots.css" />
+  <style>
+    .note-green { color: var(--success); }
+    .note-red   { color: var(--danger); }
+    .legend { display: flex; gap: 22px; font-size: .88rem; color: var(--text-soft); }
+    .legend span { display: inline-flex; align-items: center; gap: 9px; }
+    .section-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; margin-bottom: 26px; }
+    .placeholder {
+      display: grid; place-items: center; min-height: 160px; border-radius: var(--radius-sm);
+      border: 1px dashed var(--border-strong); color: var(--text-mute); font-size: .95rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar" id="sidebar"></aside>
+
+    <div class="main">
+      <header class="topbar" id="topbar"></header>
+
+      <main class="content">
+
+        <!-- Page heading (Simulate buttons removed) -->
+        <div class="page-head">
+          <div>
+            <h1>Smart Parking Monitoring System</h1>
+            <p>Here’s what’s happening in your parking facility today.</p>
+          </div>
+        </div>
+
+        <!-- Stat cards -->
+        <section class="grid-3">
+          <div class="card stat">
+            <div class="stat-top">
+              <div class="stat-icon blue" data-icon="grid"></div>
+              <span class="stat-label">Total Parking Slots</span>
+            </div>
+            <div class="stat-value" id="statTotal">0</div>
+            <div class="stat-note"><span class="dot gray"></span><span id="noteTotal"></span></div>
+          </div>
+
+          <div class="card stat">
+            <div class="stat-top">
+              <div class="stat-icon green" data-icon="check"></div>
+              <span class="stat-label">Available Slots</span>
+            </div>
+            <div class="stat-value" id="statAvailable">0</div>
+            <div class="stat-note note-green"><span class="dot"></span><span id="noteAvailable"></span></div>
+          </div>
+
+          <div class="card stat">
+            <div class="stat-top">
+              <div class="stat-icon red" data-icon="car"></div>
+              <span class="stat-label">Occupied Slots</span>
+            </div>
+            <div class="stat-value" id="statOccupied">0</div>
+            <div class="stat-note note-red"><span class="dot red"></span><span id="noteOccupied"></span></div>
+          </div>
+        </section>
+
+        <!-- Live Parking Slot Monitoring (built in Step 5) -->
+        <section class="card" id="slotsCard">
+          <div class="section-head">
+            <div>
+              <div class="card-title">Live Parking Slot Monitoring</div>
+              <div class="card-sub">Real-time 3D overview of all 8 parking bays</div>
+            </div>
+            <div class="legend">
+              <span><i class="dot"></i>Vacant</span>
+              <span><i class="dot red"></i>Occupied</span>
+            </div>
+          </div>
+          <div id="slotGrid"><div class="placeholder">3D parking slots will appear here (Step 5)</div></div>
+        </section>
+
+        <!-- Activity / Gate / Warnings (built in Step 6) -->
+        <!-- Activity / Gate / Warnings -->
+        <section class="grid-2 act-grid">
+          <div class="card" id="activityCard"></div>
+          <div class="side-stack">
+            <div class="card" id="gateCard"></div>
+            <div class="card" id="alertsCard"></div>
+          </div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <script src="js/auth.js"></script>
+  <script src="js/store.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/dashboard.js"></script>
+  <script>
+    if (Auth.guard('admin')) {
+      UI.mount({ page: 'dashboard', title: 'Dashboard' });
+      Dashboard.init();
+    }
+  </script>
+</body>
+</html>

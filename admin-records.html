@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ParkFlow — Records</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar" id="sidebar"></aside>
+
+    <div class="main">
+      <header class="topbar" id="topbar"></header>
+
+      <main class="content">
+
+        <div class="page-head">
+          <div>
+            <h1>Parking Records</h1>
+            <p>View and manage all vehicle entry and exit activities.</p>
+          </div>
+          <button class="btn btn-primary" id="exportBtn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 11l5 5 5-5M5 20h14"/></svg>
+            Export CSV
+          </button>
+        </div>
+
+        <!-- 3 stat cards -->
+        <section class="grid-3">
+          <div class="card stat">
+            <div class="stat-top">
+              <div class="stat-icon blue" data-icon="car"></div>
+              <span class="stat-label">Total Vehicles Today</span>
+            </div>
+            <div class="stat-value" id="statToday">0</div>
+            <div class="stat-note"><span class="dot gray"></span>Entries since midnight</div>
+          </div>
+
+          <div class="card stat">
+            <div class="stat-top">
+              <div class="stat-icon green" data-icon="check"></div>
+              <span class="stat-label">Status</span>
+            </div>
+            <div class="stat-value txt ok" id="statStatus">Open</div>
+            <div class="stat-note"><span class="dot"></span><span id="noteStatus"></span></div>
+          </div>
+
+          <div class="card stat">
+            <div class="stat-top">
+              <div class="stat-icon purple" data-icon="grid"></div>
+              <span class="stat-label">Parking Slot Status</span>
+            </div>
+            <div class="stat-value" id="statSlots">0/8</div>
+            <div class="stat-note"><span class="dot gray"></span><span id="noteSlots"></span></div>
+          </div>
+        </section>
+
+        <!-- Total Parking Sessions -->
+        <section class="card" id="sessionsCard">
+          <div class="panel-head" style="margin-bottom:0">
+            <div>
+              <div class="card-title">Total Parking Sessions</div>
+              <div class="card-sub" id="sessRange">Last 14 days</div>
+            </div>
+            <div class="tabs" id="sessTabs">
+              <button class="active" data-range="daily">Daily</button>
+              <button data-range="weekly">Weekly</button>
+              <button data-range="monthly">Monthly</button>
+            </div>
+          </div>
+
+          <div class="sess-stats">
+            <div class="sess-stat"><small>Total sessions</small><b id="sessTotal">0</b><span id="sessTotalNote"></span></div>
+            <div class="sess-stat"><small id="sessAvgLabel">Average per day</small><b id="sessAvg">0</b><span>across the period</span></div>
+            <div class="sess-stat"><small>Busiest</small><b id="sessPeak">0</b><span id="sessPeakNote"></span></div>
+          </div>
+
+          <div class="chart-box" id="chartBox"></div>
+        </section>
+
+        <!-- Records table -->
+        <section class="card">
+          <div class="card-title">Vehicle Entry and Exit Records</div>
+          <div class="card-sub" id="countText">0 records found</div>
+
+          <div class="toolbar">
+            <div class="search-box">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+              <input class="input" id="searchInput" type="text" placeholder="Search vehicle ID or plate..." />
+            </div>
+            <input class="input sm" id="dateInput" type="date" />
+            <select class="input sm" id="statusInput">
+              <option value="all">All statuses</option>
+              <option value="parked">Parked</option>
+              <option value="exited">Exited</option>
+            </select>
+            <button class="link-btn" id="resetBtn">Reset</button>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th data-sort="id">Record ID</th>
+                  <th data-sort="plate">Vehicle ID / Plate</th>
+                  <th data-sort="slot">Slot</th>
+                  <th data-sort="entry">Date</th>
+                  <th data-sort="entry">Entry Time</th>
+                  <th data-sort="exit">Exit Time</th>
+                  <th data-sort="duration">Duration</th>
+                  <th data-sort="status">Status</th>
+                </tr>
+              </thead>
+              <tbody id="recBody"></tbody>
+            </table>
+          </div>
+
+          <div class="pager">
+            <span id="pagerText"></span>
+            <div class="btns">
+              <button class="btn" id="prevBtn">← Previous</button>
+              <button class="btn" id="nextBtn">Next →</button>
+            </div>
+          </div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <script src="js/auth.js"></script>
+  <script src="js/store.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/records.js"></script>
+  <script>
+    if (Auth.guard('admin')) {
+      UI.mount({ page: 'records', title: 'Records' });
+      Records.init();
+    }
+  </script>
+</body>
+</html>
